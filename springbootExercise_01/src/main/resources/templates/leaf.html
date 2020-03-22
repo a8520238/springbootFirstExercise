@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+
+<body>
+<p th:text="${msg}">
+
+<p>
+    <span th:text="${user.id}">0</span>
+    <span th:text="${user.phone}">110</span>
+    <span th:text="${user.email}">qq.com</span>
+    <span th:text="${user.address}">北京</span>
+</p>
+
+
+<div th:object="${user}">
+    <p>id: <span th:text="*{id}"></span></p>
+</div>
+
+<a href="http://localhost:8080/boot/user/info?id=100">查看</a>
+<a href="info.html" th:href="@{'http://localhost:8080/boot/user/info?id='+${user.id}}">查看</a>
+
+<a href="info.html" th:href="@{'user/info?id=100'}">查看</a>
+<a href="info.html" th:href="@{'/user/info?id=100'}">查看</a>
+
+<form id="login" th:action="@{/boot/login}"></form>
+
+<!--List中取数据-->
+<p th:each="user : ${userList}">
+    <span th:text="${userStat.count}">x</span>
+    <span th:text="${user.id}">0</span>
+    <span th:text="${user.phone}">110</span>
+    <span th:text="${user.email}">qq.com</span>
+    <span th:text="${user.address}">北京</span>
+</p>
+
+<!--Map中取数据-->
+<p th:each="u1 : ${userMap}">
+    <span th:text="${u1Stat.count}">x</span>
+    <span th:text="${u1.getKey()}">0</span>
+    <span th:text="${u1.getValue().id}">0</span>
+    <span th:text="${u1.value.phone}">110</span>
+    <span th:text="${u1.value.email}">qq.com</span>
+    <span th:text="${u1.value.address}">北京</span>
+</p>
+
+<!--动态取变量-->
+<span th:id="${userName}">aaa</span>
+
+<!--if判断-->
+<div th:if="${sex eq 1}">男</div>
+<div th:unless="${sex eq 2}">女</div>
+
+<script th:src="@{/js/jquery.js}"></script>
+<img th:src="@{/image/test.jpg}"/>
+
+<div>
+    <input type="text" id="nick" name="nick" th:text="${user.phone}">
+
+    <input type="text" id="phone" name="phone" th:value="${user.phone}">
+
+    <input type="text" id="phone2" name="phone2" th:attr="value=${user.phone}">
+</div>
+
+<span th:attr="data-ref=${user.phone}" th:onclick="clickMe()">22</span>
+<script>
+    function clickMe() {
+        alert("click");
+    }
+</script>
+
+<div th:style="'display:block;'">
+    test
+</div>
+
+<form id="login2" th:action="@{/login}" th:method="post">
+form
+</form>
+设置表单名称 <input th:type="text" th:id="${user.phone}" th:name="${user.address}"/>
+
+<!--下面两者等价-->
+
+<div th:inline="text">
+    [[${user.phone}]]
+</div>
+
+<div th:text="${user.phone}">
+    13004444
+</div>
+
+<div th:inline="none">
+    [[${user.phone}]]
+</div>
+
+内联脚步
+<script th:inline="javascript" type="text/javascript">
+    var user = [[${user.phone}]];
+    alert(user);
+</script>
+
+<script th:inline="javascript" type="text/javascript">
+    var msg = "Hello," + [[${user.phone}]];
+    alert(msg);
+</script>
+
+<span th:text="${#request.getAttribute('name')}">
+    name
+</span>
+
+<span th:text="${#session.getAttribute('address')}">
+    name
+</span>
+
+<span th:inline="text">
+    [[${#session.id}]]
+    [[${#session.lastAccessedTime}]]
+</span>
+
+<span th:text="${#dates.format(date, 'yyyy-MM-dd HH:mm:ss')}">
+    time
+</span>
+</body>
+</html>
